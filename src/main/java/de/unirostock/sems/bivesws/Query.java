@@ -165,7 +165,7 @@ extends HttpServlet
 					}
 					if (in.xml != null)
 					{
-						res.put ("nodeStats", (JSONObject) in.xml.getNodeStats ());
+						res.put ("nodeStats", in.xml.getNodeStats ());
 					}
 					classRes.put (in.id, res);
 				}
