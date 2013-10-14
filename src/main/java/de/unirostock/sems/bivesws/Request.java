@@ -25,6 +25,8 @@ public class Request
 	public static final int WANT_COMP_HIERARCHY_GRAPHML = 128;
 	public static final int WANT_COMP_HIERARCHY_DOT = 256;
 	public static final int WANT_REPORT_RST = 512;
+	public static final int WANT_COMP_HIERARCHY_JSON = 1024;
+	public static final int WANT_CRN_JSON = 2048;
 
 	public static final String REQ_FILES = "files";
 	public static final String REQ_WANT = "get";
@@ -36,8 +38,10 @@ public class Request
 	public static final String REQ_WANT_REPORT_HTML = "reportHtml";
 	public static final String REQ_WANT_CRN_GRAPHML = "crnGraphml";
 	public static final String REQ_WANT_CRN_DOT = "crnDot";
+	public static final String REQ_WANT_CRN_JSON = "crnJson";
 	public static final String REQ_WANT_COMP_HIERARCHY_GRAPHML = "compHierarchyGraphml";
 	public static final String REQ_WANT_COMP_HIERARCHY_DOT = "compHierarchyDot";
+	public static final String REQ_WANT_COMP_HIERARCHY_JSON = "compHierarchyJson";
 	
 	private Vector<Document> files;
 	
@@ -95,11 +99,15 @@ public class Request
 				wanted |= WANT_CRN_GRAPHML;
 			else if (w.equals (REQ_WANT_CRN_DOT))
 				wanted |= WANT_CRN_DOT;
+			else if (w.equals (REQ_WANT_CRN_JSON))
+				wanted |= WANT_CRN_JSON;
 			
 			else if (w.equals (REQ_WANT_COMP_HIERARCHY_GRAPHML))
 				wanted |= WANT_COMP_HIERARCHY_GRAPHML;
 			else if (w.equals (REQ_WANT_COMP_HIERARCHY_DOT))
 				wanted |= WANT_COMP_HIERARCHY_DOT;
+			else if (w.equals (REQ_WANT_COMP_HIERARCHY_JSON))
+				wanted |= WANT_COMP_HIERARCHY_JSON;
 			
 			else if (w.equals (REQ_WANT_DOCUMENTTYPE))
 				wanted |= WANT_DOCUMENTTYPE;

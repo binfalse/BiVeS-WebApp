@@ -7,11 +7,21 @@
     <version>1.0</version>
     <name>BiVeS-WS</name>
     <url>http://sems.uni-rostock.de/projects/bives/</url>
+    <developers>
+        <developer>
+            <name>Martin Scharm</name>
+            <id>martin</id>
+            <email>martin@binfalse.de</email>
+            <roles>
+                <role>Java Developer</role>
+            </roles>
+        </developer>
+    </developers>
     <dependencies>
         <dependency>
             <groupId>de.unirostock.sems</groupId>
             <artifactId>BiVeS</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
@@ -24,9 +34,26 @@
             <version>2.5</version>
         </dependency>
     </dependencies>
+    <distributionManagement>
+        <downloadUrl>http://mvn.sems.uni-rostock.de</downloadUrl>   
+        <snapshotRepository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>sems-maven-repository</id>
+            <name>SEMS Maven Release Repository</name>
+            <url>scp://sems.uni-rostock.de:/home/stuff/web/mvn/snapshots/</url>
+            <layout>default</layout>
+        </snapshotRepository>
+
+        <repository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>sems-maven-repository</id>
+            <name>Enterprise Systems Maven Repository</name>
+            <url>scp://sems.uni-rostock.de:/home/stuff/web/mvn/releases/</url>
+            <layout>default</layout>
+        </repository>
+    </distributionManagement>
     <build>
-        <finalName>bives</finalName>
-<plugins>
+        <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -35,6 +62,6 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
-</plugins>
+        </plugins>
     </build>
 </project>

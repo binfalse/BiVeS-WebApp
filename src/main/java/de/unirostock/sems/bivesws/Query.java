@@ -324,8 +324,14 @@ extends HttpServlet
 		if ((wanted & Request.WANT_CRN_DOT) > 0)
 			toReturn.put (Request.REQ_WANT_CRN_DOT, diff.getCRNDotGraph ());
 		
+		if ((wanted & Request.WANT_CRN_JSON) > 0)
+			toReturn.put (Request.REQ_WANT_CRN_JSON, diff.getCRNJsonGraph ());
+		
 		if ((wanted & Request.WANT_COMP_HIERARCHY_DOT) > 0)
 			toReturn.put (Request.REQ_WANT_COMP_HIERARCHY_DOT, diff.getHierarchyDotGraph ());
+		
+		if ((wanted & Request.WANT_COMP_HIERARCHY_JSON) > 0)
+			toReturn.put (Request.REQ_WANT_COMP_HIERARCHY_JSON, diff.getHierarchyJsonGraph ());
 		
 		if ((wanted & Request.WANT_COMP_HIERARCHY_GRAPHML) > 0)
 			toReturn.put (Request.REQ_WANT_COMP_HIERARCHY_GRAPHML, diff.getHierarchyGraphML ());
