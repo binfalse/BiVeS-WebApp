@@ -335,6 +335,9 @@ extends HttpServlet
 		
 		if ((wanted & Request.WANT_REPORT_MD) > 0)
 			toReturn.put (Request.REQ_WANT_REPORT_MD, diff.getMarkDownReport ());
+		
+		if ((wanted & Request.WANT_REPORT_RST) > 0)
+			toReturn.put (Request.REQ_WANT_REPORT_RST, diff.getReStructuredTextReport ());
 	}
 	
 	@SuppressWarnings("unchecked")
