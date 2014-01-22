@@ -10,7 +10,7 @@
   
     <servlet>
         <servlet-name>Query</servlet-name>
-        <servlet-class>de.unirostock.sems.bivesws.Query</servlet-class>
+        <servlet-class>de.unirostock.sems.bives.webservice.Query</servlet-class>
     </servlet>
 
     <servlet-mapping>
