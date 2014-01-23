@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import de.binfalse.bflog.LOGGER;
 import de.unirostock.sems.bives.Executer;
 import de.unirostock.sems.bives.tools.FileRetriever;
 import de.unirostock.sems.bives.tools.Tools;
@@ -34,13 +33,14 @@ public class WebQueryExecuter
 {
 	
 	/** JSON key carrying the files. */
-	public static final String	REQ_FILES	= "files";
+	public static final String	REQ_FILES		= "files";
 	
 	/** JSON key carrying the requests. */
-	public static final String	REQ_WANT	= "options";
+	public static final String	REQ_WANT		= "commands";
 	
 	/** Pattern to distinguish xml files from URLs */
-	public static final Pattern XML_PATTERN = Pattern.compile ("^\\s*<.*", Pattern.DOTALL);
+	public static final Pattern	XML_PATTERN	= Pattern.compile ("^\\s*<.*",
+																						Pattern.DOTALL);
 	
 	/** The executer. */
 	private Executer						exe;
@@ -135,7 +135,7 @@ public class WebQueryExecuter
 		{
 			File f = File.createTempFile ("bives-webservice", "xml");
 			f.deleteOnExit ();
-			if (XML_PATTERN.matcher(content).find ())
+			if (XML_PATTERN.matcher (content).find ())
 			{
 				// string
 				PrintWriter out = new PrintWriter (f);
@@ -179,7 +179,8 @@ public class WebQueryExecuter
 			.println ("<html><head><title>BiVeS WebService USAGE</title></head><body>");
 		out
 			.println ("<style>p{max-width:50em;}	pre{font-size:.9em;background-color: #ddd;padding: 20px;}	</style>");
-		out.println ("<h1>BiVeS WebService USAGE</h1>");
+		out
+			.println ("<h1><a href=\"https://sems.uni-rostock.de/projects/bives/bives-webservice/\">BiVeS WebService</a> USAGE</h1>");
 		out
 			.println ("<p>To use this web service send a JSON object via post request.");
 		out.println ("The sent JSON object must be of following format:</p>");
@@ -190,7 +191,7 @@ public class WebQueryExecuter
 		out.println ("\t\t\"FILE1\",");
 		out.println ("\t\t\"FILE2\"");
 		out.println ("\t],");
-		out.println ("\t\"options\":");
+		out.println ("\t\"commands\":");
 		out.println ("\t[");
 		out.println ("\t\t\"OPTION\",");
 		out.println ("\t\t\"OPTION\",");
@@ -203,7 +204,7 @@ public class WebQueryExecuter
 			.println ("<p>files is an array of max. two files, either defined by plain XML or URLs to retrieve the files.</p>");
 		out.println ();
 		out.println ();
-		out.println ("<p>and the following options are available:</p>");
+		out.println ("<p>and the following commands are available:</p>");
 		out.println ("<pre>");
 		SortedSet<String> keys = new TreeSet<String> (options.keySet ());
 		int longest = 0;
@@ -222,14 +223,14 @@ public class WebQueryExecuter
 		longest += 2;
 		
 		out.println ();
-		out.println ("MAPPING OPTIONS");
+		out.println ("COMPARISON COMMANDS");
 		
 		for (String key : keys)
 			out.println ("\t" + key + Tools.repeat (" ", longest - key.length ())
 				+ options.get (key).description);
 		out.println ();
 		
-		out.println ("ADDITIONAL OPTIONS for single files");
+		out.println ("ADDITIONAL COMMANDS for single files");
 		for (String key : addKeys)
 			out.println ("\t" + key + Tools.repeat (" ", longest - key.length ())
 				+ addOptions.get (key).description);
@@ -237,12 +238,11 @@ public class WebQueryExecuter
 		out.println ();
 		out.println ();
 		
-		out
-			.println ("<p>an example call to compute the diff between two SBML file");
-		out
-			.println ("and ask for the highlighted chemical reaction network encoded");
-		out
-			.println ("in DOT language (crnDot) and the report encoded in HTML (reportHtml)");
+		out.println ("<p>an example call to compute the diff between two"
+			+ " <code>SBML</code> files and ask for the highlighted"
+			+ " chemical reaction network encoded in DOT language"
+			+ " (<code>crnDot</code>) and the report encoded in HTML"
+			+ " (<code>reportHtml</code>)");
 		out.println ("using curl might look like:</p>");
 		out.println ();
 		out.println ("<pre>");
@@ -254,7 +254,7 @@ public class WebQueryExecuter
 		out
 			.println ("\t\t\"http://budhat.sems.uni-rostock.de/download?downloadModel=25\"");
 		out.println ("\t],");
-		out.println ("\t\"options\":");
+		out.println ("\t\"commands\":");
 		out.println ("\t[");
 		out.println ("\t\t\"SBML\",");
 		out.println ("\t\t\"crnDot\",");
