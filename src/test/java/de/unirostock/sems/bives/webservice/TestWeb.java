@@ -60,7 +60,7 @@ public class TestWeb
 		}
 		catch (IOException e)
 		{
-			LOGGER.error ("cannot run test because i cannot create a temp file", e);
+			LOGGER.error (e, "cannot run test because i cannot create a temp file");
 		}
 		
 		JSONObject json = new JSONObject ();
@@ -105,7 +105,7 @@ public class TestWeb
 		}
 		catch (IOException e)
 		{
-			LOGGER.error ("cannot run test because i cannot create a temp file", e);
+			LOGGER.error (e, "cannot run test because i cannot create a temp file");
 		}
 		
 		JSONObject json = new JSONObject ();

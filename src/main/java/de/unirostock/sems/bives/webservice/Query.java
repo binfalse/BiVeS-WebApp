@@ -24,7 +24,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import de.binfalse.bflog.LOGGER;
-import de.unirostock.sems.bives.tools.FileRetriever;
+import de.binfalse.bfutils.FileRetriever;
 
 
 
@@ -92,6 +92,7 @@ public class Query
 	{
 		// we don't want to use local files.
 		FileRetriever.FIND_LOCAL = false;
+		LOGGER.setLogStackTrace (true);
 		
 		// here comes the magic :D
 		request.setCharacterEncoding ("UTF-8");
@@ -114,7 +115,7 @@ public class Query
 		}
 		catch (Exception e)
 		{
-			LOGGER.error ("post request processing threw an error", e);
+			LOGGER.error (e, "post request processing threw an error");
 			err.add ("Error: " + e.getMessage ());
 		}
 		
@@ -123,7 +124,7 @@ public class Query
 		{
 			err.add ("go to " + request.getRequestURL () + " to get the usage");
 			toReturn.put ("error", err);
-			LOGGER.error ("post request resulted in " + err.size () + " errors: "
+			LOGGER.error ("post request resulted in ", err.size (), " errors: "
 				+ err);
 		}
 		
@@ -147,14 +148,15 @@ public class Query
 		request.setCharacterEncoding ("UTF-8");
 		response.setStatus (HttpServletResponse.SC_BAD_REQUEST);
 		
-		PrintWriter out = response.getWriter ();
-		
 		// just to learn how a request looks like:
 		// LOGGER.setMinLevel (LOGGER.DEBUG);
 		if (LOGGER.isDebugEnabled ())
 			debugRequest (request);
 		
-		new WebQueryExecuter ().printUsage ("", out);
+		new WebQueryExecuter ().usage (request);
+		request.setAttribute ("url", request.getRequestURL());
+		
+		request.getRequestDispatcher ("/WEB-INF/Usage.jsp").forward (request, response);
 	}
 	
 	
@@ -164,7 +166,7 @@ public class Query
 	 * @param request
 	 *          the request
 	 */
-	@SuppressWarnings({ "unchecked", "deprecation" })
+	@SuppressWarnings({"deprecation" })
 	private void debugRequest (HttpServletRequest request)
 	{
 		if (!LOGGER.isDebugEnabled ())

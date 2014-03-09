@@ -14,12 +14,14 @@ import java.util.TreeSet;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import de.binfalse.bfutils.FileRetriever;
+import de.binfalse.bfutils.GeneralTools;
 import de.unirostock.sems.bives.Executer;
-import de.unirostock.sems.bives.tools.FileRetriever;
-import de.unirostock.sems.bives.tools.Tools;
 
 
 
@@ -41,6 +43,8 @@ public class WebQueryExecuter
 	/** Pattern to distinguish xml files from URLs */
 	public static final Pattern	XML_PATTERN	= Pattern.compile ("^\\s*<.*",
 																						Pattern.DOTALL);
+	
+	public static final String NEWLINE = System.getProperty("line.separator");
 	
 	/** The executer. */
 	private Executer						exe;
@@ -159,53 +163,18 @@ public class WebQueryExecuter
 	
 	
 	/**
-	 * Prints the usage including an example.
-	 * 
-	 * @param msg
-	 *          the error message
-	 * @param out
-	 *          the stream to the user
+	 * Prepares the usage including an example.
+	 *
+	 * @param request the servlet request
 	 */
-	public final void printUsage (String msg, PrintWriter out)
+	public final void usage (HttpServletRequest request)
 	{
-		
-		if (msg != null && msg.length () > 0)
-			out.println (msg);
 		
 		HashMap<String, Executer.Option> options = exe.getOptions ();
 		HashMap<String, Executer.Option> addOptions = exe.getAddOptions ();
 		
-		out
-			.println ("<html><head><title>BiVeS WebService USAGE</title></head><body>");
-		out
-			.println ("<style>p{max-width:50em;}	pre{font-size:.9em;background-color: #ddd;padding: 20px;}	</style>");
-		out
-			.println ("<h1><a href=\"https://sems.uni-rostock.de/projects/bives/bives-webservice/\">BiVeS WebService</a> USAGE</h1>");
-		out
-			.println ("<p>To use this web service send a JSON object via post request.");
-		out.println ("The sent JSON object must be of following format:</p>");
-		out.println ("<pre>");
-		out.println ("{");
-		out.println ("\t\"files\":");
-		out.println ("\t[");
-		out.println ("\t\t\"FILE1\",");
-		out.println ("\t\t\"FILE2\"");
-		out.println ("\t],");
-		out.println ("\t\"commands\":");
-		out.println ("\t[");
-		out.println ("\t\t\"OPTION\",");
-		out.println ("\t\t\"OPTION\",");
-		out.println ("\t\t[...]");
-		out.println ("\t]");
-		out.println ("}");
-		out.println ("</pre>");
-		out.println ();
-		out
-			.println ("<p>files is an array of max. two files, either defined by plain XML or URLs to retrieve the files.</p>");
-		out.println ();
-		out.println ();
-		out.println ("<p>and the following commands are available:</p>");
-		out.println ("<pre>");
+		StringBuilder str = new StringBuilder (NEWLINE);
+		
 		SortedSet<String> keys = new TreeSet<String> (options.keySet ());
 		int longest = 0;
 		for (String key : keys)
@@ -222,56 +191,27 @@ public class WebQueryExecuter
 		
 		longest += 2;
 		
-		out.println ();
-		out.println ("COMPARISON COMMANDS");
+		str.append ("COMPARISON COMMANDS").append (NEWLINE);
 		
 		for (String key : keys)
-			out.println ("\t" + key + Tools.repeat (" ", longest - key.length ())
-				+ options.get (key).description);
-		out.println ();
+			str.append ("\t")
+			.append (key)
+			.append (GeneralTools.repeat (" ", longest - key.length ()))
+			.append (options.get (key).description)
+			.append (NEWLINE);
+		str.append (NEWLINE);
 		
-		out.println ("ADDITIONAL COMMANDS for single files");
+		str.append ("ADDITIONAL COMMANDS for single files").append (NEWLINE);
 		for (String key : addKeys)
-			out.println ("\t" + key + Tools.repeat (" ", longest - key.length ())
-				+ addOptions.get (key).description);
-		out.println ("</pre>");
-		out.println ();
-		out.println ();
+		{
+			str.append ("\t")
+			.append (key)
+			.append (GeneralTools.repeat (" ", longest - key.length ()))
+			.append (addOptions.get (key).description)
+			.append (NEWLINE);
+		}
 		
-		out.println ("<p>an example call to compute the diff between two"
-			+ " <code>SBML</code> files and ask for the highlighted"
-			+ " chemical reaction network encoded in DOT language"
-			+ " (<code>crnDot</code>) and the report encoded in HTML"
-			+ " (<code>reportHtml</code>)");
-		out.println ("using curl might look like:</p>");
-		out.println ();
-		out.println ("<pre>");
-		out.println ("curl -d '{");
-		out.println ("\t\"files\":");
-		out.println ("\t[");
-		out
-			.println ("\t\t\"http://budhat.sems.uni-rostock.de/download?downloadModel=24\",");
-		out
-			.println ("\t\t\"http://budhat.sems.uni-rostock.de/download?downloadModel=25\"");
-		out.println ("\t],");
-		out.println ("\t\"commands\":");
-		out.println ("\t[");
-		out.println ("\t\t\"SBML\",");
-		out.println ("\t\t\"crnDot\",");
-		out.println ("\t\t\"reportHtml\"");
-		out.println ("\t]");
-		out.println ("}' http://bives.sems.uni-rostock.de | python -mjson.tool");
-		out.println ("</pre>");
-		out.println ();
 		
-		out.println ("<p>the result will be a JSON object like:</p>");
-		out.println ("<pre>");
-		out.println ("{");
-		out.println ("\t\"crnDot\": \"digraph BiVeSexport {[...]}\",");
-		out.println ("\t\"reportHtml\": \"SBML Differences[...]\"");
-		out.println ("}");
-		out.println ("</pre>");
-		
-		out.println ("</body></html>");
+		request.setAttribute ("commands", str.toString ());
 	}
 }
