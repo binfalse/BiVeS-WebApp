@@ -1,0 +1,87 @@
+<project name="BiVeS-WS" default="dist" basedir=".">
+
+    <property file="build.properties" />
+    <property file="${user.home}/build.properties" />
+
+    <property name="app.name" value="BiVeS-WS" />
+    <property name="app.path" value="/${app.name}" />
+    <property name="app.version" value="1.2" />
+    <property name="build.home" value="${basedir}/build" />
+    <property name="dist.home" value="${basedir}/dist" />
+    <property name="src.home" value="${basedir}/src/main/java" />
+    <property name="web.home" value="${basedir}/src/main/webapp" />
+    <property name="reflib.home" value="${basedir}/lib" />
+    <property name="lib.home" value="${web.home}/WEB-INF/lib" />
+    <property name="compile.debug" value="true" />
+    <property name="compile.deprecation" value="false" />
+    <property name="compile.optimize" value="true" />
+
+
+    <path id="compile.classpath">
+        <fileset dir="${reflib.home}">
+            <include name="*.jar" />
+        </fileset>
+        <fileset dir="${lib.home}">
+            <include name="*.jar" />
+        </fileset>
+    </path>
+
+
+    <target name="clean" description="Delete old build and dist directories">
+        <delete dir="${dist.home}" />
+        <delete dir="${build.home}" />
+    </target>
+
+
+    <target name="compile" depends="prepare" description="Compile Java sources">
+        <mkdir dir="${build.home}/WEB-INF/classes" />
+        <javac srcdir="${src.home}" destdir="${build.home}/WEB-INF/classes" debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}">
+            <classpath refid="compile.classpath" />
+        </javac>
+    </target>
+
+    <target name="dist" depends="compile" description="Create war file">
+        <copy todir="${build.home}/WEB-INF/lib">
+            <fileset dir="${reflib.home}" />
+        </copy>
+        <jar jarfile="${dist.home}/${app.name}-${app.version}.war" basedir="${build.home}" />
+    </target>
+
+    <target name="sign" depends="dist" description="sign a dist">
+        <checksum file="${dist.home}/${app.name}-${app.version}.war" forceOverwrite="yes"/>
+        <move file="${dist.home}/${app.name}-${app.version}.war.MD5" tofile="${dist.home}/${app.name}-${app.version}.war.md5"/>
+        <exec executable="gpg">
+            <arg value="--output"/>
+            <arg value="${dist.home}/${app.name}-${app.version}.war.md5.sign"/>
+            <arg value="-abs"/>
+            <arg value="${dist.home}/${app.name}-${app.version}.war.md5"/>
+        </exec>
+    </target>
+
+    <target name="prepare">
+        <assertDirAvailable dir="${reflib.home}" />
+        <mkdir dir="${dist.home}" />
+        <mkdir dir="${lib.home}" />
+        <mkdir dir="${build.home}" />
+        <mkdir dir="${build.home}/WEB-INF" />
+        <mkdir dir="${build.home}/WEB-INF/classes" />
+        <copy todir="${build.home}">
+            <fileset dir="${web.home}" />
+        </copy>
+        <mkdir dir="${build.home}/WEB-INF/lib" />
+    </target>
+
+
+    <macrodef name="assertDirAvailable">
+        <attribute name="dir" />
+        <sequential>
+            <fail message="Please create dir @{dir} containing the depenencies:${line.separator}${line.separator} >> BiVeS (download fat from http://bin.sems.uni-rostock.de/))${line.separator} >> json-simple (see https://code.google.com/p/json-simple/)${line.separator} >> javax.servlet-api (see e.g. http://repo1.maven.org/maven2/javax/servlet/javax.servlet-api/)${line.separator}${line.separator}">
+                <condition>
+                    <not>
+                        <available file="@{dir}" type="dir" />
+                    </not>
+                </condition>
+            </fail>
+        </sequential>
+    </macrodef>
+</project>
