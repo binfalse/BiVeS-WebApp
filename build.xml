@@ -5,7 +5,7 @@
 
     <property name="app.name" value="BiVeS-WS" />
     <property name="app.path" value="/${app.name}" />
-    <property name="app.version" value="1.2" />
+    <property name="app.version" value="1.2.2" />
     <property name="build.home" value="${basedir}/build" />
     <property name="dist.home" value="${basedir}/dist" />
     <property name="src.home" value="${basedir}/src/main/java" />
@@ -35,7 +35,7 @@
 
     <target name="compile" depends="prepare" description="Compile Java sources">
         <mkdir dir="${build.home}/WEB-INF/classes" />
-        <javac srcdir="${src.home}" destdir="${build.home}/WEB-INF/classes" debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}">
+        <javac srcdir="${src.home}" destdir="${build.home}/WEB-INF/classes" debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}" includeantruntime="false">
             <classpath refid="compile.classpath" />
         </javac>
     </target>
@@ -48,13 +48,13 @@
     </target>
 
     <target name="sign" depends="dist" description="sign a dist">
-        <checksum file="${dist.home}/${app.name}-${app.version}.war" forceOverwrite="yes"/>
-        <move file="${dist.home}/${app.name}-${app.version}.war.MD5" tofile="${dist.home}/${app.name}-${app.version}.war.md5"/>
+        <checksum file="${dist.home}/${app.name}-${app.version}.war" forceOverwrite="yes" />
+        <move file="${dist.home}/${app.name}-${app.version}.war.MD5" tofile="${dist.home}/${app.name}-${app.version}.war.md5" />
         <exec executable="gpg">
-            <arg value="--output"/>
-            <arg value="${dist.home}/${app.name}-${app.version}.war.md5.sign"/>
-            <arg value="-abs"/>
-            <arg value="${dist.home}/${app.name}-${app.version}.war.md5"/>
+            <arg value="--output" />
+            <arg value="${dist.home}/${app.name}-${app.version}.war.md5.sign" />
+            <arg value="-abs" />
+            <arg value="${dist.home}/${app.name}-${app.version}.war.md5" />
         </exec>
     </target>
 
@@ -75,7 +75,7 @@
     <macrodef name="assertDirAvailable">
         <attribute name="dir" />
         <sequential>
-            <fail message="Please create dir @{dir} containing the depenencies:${line.separator}${line.separator} >> BiVeS (download fat from http://bin.sems.uni-rostock.de/))${line.separator} >> json-simple (see https://code.google.com/p/json-simple/)${line.separator} >> javax.servlet-api (see e.g. http://repo1.maven.org/maven2/javax/servlet/javax.servlet-api/)${line.separator}${line.separator}">
+            <fail message="Please create dir @{dir} containing the depenencies:${line.separator}${line.separator} &gt;&gt; BiVeS (download fat from http://bin.sems.uni-rostock.de/))${line.separator} &gt;&gt; json-simple (see https://code.google.com/p/json-simple/)${line.separator} &gt;&gt; javax.servlet-api (see e.g. http://repo1.maven.org/maven2/javax/servlet/javax.servlet-api/)${line.separator}${line.separator}">
                 <condition>
                     <not>
                         <available file="@{dir}" type="dir" />
