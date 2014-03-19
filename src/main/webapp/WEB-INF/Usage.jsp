@@ -11,7 +11,7 @@
 	</head>
 	<body>
 	
-<h1><a href="https://sems.uni-rostock.de/projects/bives/bives-webservice/">BiVeS WebService</a> USAGE</h1>
+<h1><a href="https://sems.uni-rostock.de/trac/bivesws">BiVeS WebService</a> USAGE</h1>
 
 <p>To use this web service send a JSON object via post request.
 The sent JSON object must be of following format:</p>
