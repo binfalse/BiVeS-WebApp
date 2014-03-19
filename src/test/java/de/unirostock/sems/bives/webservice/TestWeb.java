@@ -86,7 +86,7 @@ public class TestWeb
 		}
 		catch (Exception e)
 		{
-			assertEquals ("query executer should have produced 2 errors", 2, err.size ());
+			assertTrue ("query executer should have produced an error", 0 < err.size ());
 		}
 	}
 	
@@ -131,7 +131,7 @@ public class TestWeb
 		}
 		catch (Exception e)
 		{
-			assertEquals ("query executer should have produced 2 errors", 2, err.size ());
+			assertTrue ("query executer should have produced an error", 0 < err.size ());
 		}
 	}
 	

@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -90,36 +92,48 @@ public class WebQueryExecuter
 		}
 		
 		// which files to use?
-		Vector<File> files = new Vector<File> ();
+		//Vector<File> files = new Vector<File> ();
 		jArr = (JSONArray) jObj.get (REQ_FILES);
-		for (int i = 0; i < jArr.size (); i++)
+		/*for (int i = 0; i < jArr.size (); i++)
 		{
 			File f = getFile ((String) jArr.get (i), err);
 			if (f != null)
 				files.add (f);
-		}
+		}*/
 		
 		// some general checks
-		if (files.size () < 1)
+		if (jArr.size () < 1)
 			throw new IllegalArgumentException ("found no files.");
-		if (files.size () > 2)
+		if (jArr.size () > 2)
 			throw new IllegalArgumentException (
 				"found more than 2 files, not supported.");
 		
 		if (wanted < 1)
 			throw new IllegalArgumentException (
 				"nothing to do. (no options provided?)");
-		
+
+    List<Exception> errors = new ArrayList<Exception> ();
 		// single or compare mode?
-		if (files.size () == 1)
-			exe.executeSingle (files.firstElement (), toReturn, wanted);
-		else
-			exe.executeCompare (files.firstElement (), files.get (1), toReturn,
-				wanted);
+    try
+    {
+			if (jArr.size () == 1)
+				exe.executeSingle ((String) jArr.get (0), toReturn, wanted, errors);
+			else
+				exe.executeCompare ((String) jArr.get (0), (String) jArr.get (1), toReturn,
+					wanted, errors);
+    }
+    catch (Exception e)
+    {
+    	err.add ("cannot execute: " + e);
+    	throw e;
+    }
+    
+  	for (Exception e : errors)
+  		err.add ("ERROR: " + e);
 		
 		// done...
-		for (File f : files)
-			f.delete ();
+		/*for (File f : files)
+			f.delete ();*/
 	}
 	
 	
