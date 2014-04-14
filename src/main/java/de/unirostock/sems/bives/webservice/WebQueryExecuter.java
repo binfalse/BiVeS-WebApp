@@ -11,6 +11,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import de.binfalse.bflog.LOGGER;
 import de.binfalse.bfutils.FileRetriever;
 import de.binfalse.bfutils.GeneralTools;
 import de.unirostock.sems.bives.Executer;
@@ -84,6 +86,18 @@ public class WebQueryExecuter
 		JSONArray jArr = (JSONArray) jObj.get (REQ_WANT);
 		for (int i = 0; i < jArr.size (); i++)
 		{
+			if (((String) jArr.get (i)).equals ("verbose"))
+			{
+				LOGGER.setMinLevel (LOGGER.INFO);
+				continue;
+			}
+
+			if (((String) jArr.get (i)).equals ("stacktrace"))
+			{
+				LOGGER.setLogStackTrace (true);;
+				continue;
+			}
+			
 			Executer.Option o = exe.get ((String) jArr.get (i));
 			if (o == null)
 				throw new IllegalArgumentException ("don't understand option: "
@@ -92,14 +106,7 @@ public class WebQueryExecuter
 		}
 		
 		// which files to use?
-		//Vector<File> files = new Vector<File> ();
 		jArr = (JSONArray) jObj.get (REQ_FILES);
-		/*for (int i = 0; i < jArr.size (); i++)
-		{
-			File f = getFile ((String) jArr.get (i), err);
-			if (f != null)
-				files.add (f);
-		}*/
 		
 		// some general checks
 		if (jArr.size () < 1)
@@ -132,47 +139,6 @@ public class WebQueryExecuter
   		err.add ("ERROR: " + e);
 		
 		// done...
-		/*for (File f : files)
-			f.delete ();*/
-	}
-	
-	
-	/**
-	 * Get the file.
-	 * 
-	 * @param content
-	 *          the content
-	 * @param err
-	 *          the errors
-	 * @return the file
-	 */
-	@SuppressWarnings("unchecked")
-	private File getFile (String content, JSONArray err)
-	{
-		try
-		{
-			File f = File.createTempFile ("bives-webservice", "xml");
-			f.deleteOnExit ();
-			if (XML_PATTERN.matcher (content).find ())
-			{
-				// string
-				PrintWriter out = new PrintWriter (f);
-				out.print (content);
-				out.close ();
-			}
-			else
-			{
-				// download
-				URI fileUri = FileRetriever.getUri (content, null);
-				FileRetriever.getFile (fileUri, f);
-			}
-			return f;
-		}
-		catch (IOException | URISyntaxException e)
-		{
-			err.add ("cannot read " + content);
-		}
-		return null;
 	}
 	
 	
@@ -203,7 +169,18 @@ public class WebQueryExecuter
 				longest = key.length ();
 		}
 		
+
+		Map<String, String> server = new HashMap<String, String> ();
+		server.put ("verbose", "write more information to the log files");
+		server.put ("stacktrace", "also log stack traces");
+		for (String key : server.keySet ())
+		{
+			if (key.length () > longest)
+				longest = key.length ();
+		}
+		
 		longest += 2;
+		
 		
 		str.append ("COMPARISON COMMANDS").append (NEWLINE);
 		
@@ -222,6 +199,18 @@ public class WebQueryExecuter
 			.append (key)
 			.append (GeneralTools.repeat (" ", longest - key.length ()))
 			.append (addOptions.get (key).description)
+			.append (NEWLINE);
+		}
+		str.append (NEWLINE);
+
+		str.append ("SERVER COMMANDS").append (NEWLINE);
+		
+		for (String key : server.keySet ())
+		{
+			str.append ("\t")
+			.append (key)
+			.append (GeneralTools.repeat (" ", longest - key.length ()))
+			.append (server.get (key))
 			.append (NEWLINE);
 		}
 		
