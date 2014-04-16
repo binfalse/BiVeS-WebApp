@@ -84,17 +84,20 @@ public class WebQueryExecuter
 		// check what we have to do
 		int wanted = 0;
 		JSONArray jArr = (JSONArray) jObj.get (REQ_WANT);
+		LOGGER.setMinLevel (LOGGER.ERROR);
 		for (int i = 0; i < jArr.size (); i++)
 		{
 			if (((String) jArr.get (i)).equals ("verbose"))
 			{
 				LOGGER.setMinLevel (LOGGER.INFO);
+				LOGGER.info ("set info");
 				continue;
 			}
 
 			if (((String) jArr.get (i)).equals ("stacktrace"))
 			{
 				LOGGER.setLogStackTrace (true);;
+				LOGGER.info ("set stack trace");
 				continue;
 			}
 			
@@ -107,6 +110,7 @@ public class WebQueryExecuter
 		
 		// which files to use?
 		jArr = (JSONArray) jObj.get (REQ_FILES);
+		LOGGER.info ("following files to be used: " + jArr);
 		
 		// some general checks
 		if (jArr.size () < 1)
