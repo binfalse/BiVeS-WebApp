@@ -84,24 +84,70 @@ public class WebQueryExecuter
 		// check what we have to do
 		int wanted = 0;
 		JSONArray jArr = (JSONArray) jObj.get (REQ_WANT);
+    // check for backwards compatibility (we moved from crn to rn)
+    boolean chemicalReactionNetwork = false;
+    
 		LOGGER.setMinLevel (LOGGER.ERROR);
 		for (int i = 0; i < jArr.size (); i++)
 		{
-			if (((String) jArr.get (i)).equals ("verbose"))
+			String arg = ((String) jArr.get (i));
+			
+			if ((arg).equals ("verbose"))
 			{
 				LOGGER.setMinLevel (LOGGER.INFO);
 				LOGGER.info ("set info");
 				continue;
 			}
 
-			if (((String) jArr.get (i)).equals ("stacktrace"))
+			if ((arg).equals ("stacktrace"))
 			{
 				LOGGER.setLogStackTrace (true);;
 				LOGGER.info ("set stack trace");
 				continue;
 			}
 			
-			Executer.Option o = exe.get ((String) jArr.get (i));
+
+    	// START backwards compatibility
+    	if ((arg).equals ("crnGraphml"))
+    	{
+    		wanted |= Executer.WANT_REACTION_GRAPHML;
+    		chemicalReactionNetwork = true;
+    		continue;
+    	}
+    	if ((arg).equals ("crnDot"))
+    	{
+    		wanted |= Executer.WANT_REACTION_DOT;
+    		chemicalReactionNetwork = true;
+    		continue;
+    	}
+    	if ((arg).equals ("crnJson"))
+    	{
+    		wanted |= Executer.WANT_REACTION_JSON;
+    		chemicalReactionNetwork = true;
+    		continue;
+    	}
+    	if ((arg).equals ("singleCrnGraphml"))
+    	{
+    		wanted |= Executer.WANT_SINGLE_REACTION_GRAPHML;
+    		chemicalReactionNetwork = true;
+    		continue;
+    	}
+    	if ((arg).equals ("singleCrnDot"))
+    	{
+    		wanted |= Executer.WANT_SINGLE_REACTION_DOT;
+    		chemicalReactionNetwork = true;
+    		continue;
+    	}
+    	if ((arg).equals ("singleCrnJson"))
+    	{
+    		wanted |= Executer.WANT_SINGLE_REACTION_JSON;
+    		chemicalReactionNetwork = true;
+    		continue;
+    	}
+    	// END backwards compatibility			
+			
+			
+			Executer.Option o = exe.get (arg);
 			if (o == null)
 				throw new IllegalArgumentException ("don't understand option: "
 					+ jArr.get (i));
@@ -128,10 +174,34 @@ public class WebQueryExecuter
     try
     {
 			if (jArr.size () == 1)
+			{
 				exe.executeSingle ((String) jArr.get (0), toReturn, wanted, errors);
+	    	// check for backwards compatibility
+	    	if (chemicalReactionNetwork)
+	    	{
+	    		if (toReturn.get (Executer.REQ_WANT_SINGLE_REACTIONS_GRAPHML) != null)
+	    			toReturn.put ("singleCrnGraphml", toReturn.get (Executer.REQ_WANT_SINGLE_REACTIONS_GRAPHML));
+	    		if (toReturn.get (Executer.REQ_WANT_SINGLE_REACTIONS_JSON) != null)
+	    			toReturn.put ("singleCrnJson", toReturn.get (Executer.REQ_WANT_SINGLE_REACTIONS_JSON));
+	    		if (toReturn.get (Executer.REQ_WANT_SINGLE_REACTIONS_DOT) != null)
+	    			toReturn.put ("singleCrnDot", toReturn.get (Executer.REQ_WANT_SINGLE_REACTIONS_DOT));
+	    	}
+			}
 			else
+			{
 				exe.executeCompare ((String) jArr.get (0), (String) jArr.get (1), toReturn,
 					wanted, errors);
+	    	// check for backwards compatibility
+	    	if (chemicalReactionNetwork)
+	    	{
+	    		if (toReturn.get (Executer.REQ_WANT_REACTIONS_GRAPHML) != null)
+	    			toReturn.put ("crnGraphml", toReturn.get (Executer.REQ_WANT_REACTIONS_GRAPHML));
+	    		if (toReturn.get (Executer.REQ_WANT_REACTIONS_JSON) != null)
+	    			toReturn.put ("crnJson", toReturn.get (Executer.REQ_WANT_REACTIONS_JSON));
+	    		if (toReturn.get (Executer.REQ_WANT_REACTIONS_DOT) != null)
+	    			toReturn.put ("crnDot", toReturn.get (Executer.REQ_WANT_REACTIONS_DOT));
+	    	}
+			}
     }
     catch (Exception e)
     {

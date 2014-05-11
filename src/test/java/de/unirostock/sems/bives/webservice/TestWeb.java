@@ -163,7 +163,8 @@ public class TestWeb
 		{
 			new WebQueryExecuter ().executeQuery (json, toReturn, err);
 			assertEquals ("err should be empty, but apparently there was an error", 0, err.size ());
-			assertEquals ("toReturn should contain exactly 2 results", 2, toReturn.size ());
+			// for backwards compatibility -> array should contain 3 results (crnDot + reactionsDot = same)
+			assertEquals ("toReturn should contain exactly 3 results", 3, toReturn.size ());
 			
 			assertNotNull ("toReturn should return a dot graph", toReturn.get ("crnDot"));
 			assertTrue ("toReturn should return a non-empty dot graph", ((String) toReturn.get ("crnDot")).length () > 0);
@@ -177,6 +178,84 @@ public class TestWeb
 			e.printStackTrace ();
 			fail ("couldn't execute web query: " + e.getMessage ());
 		}
+		
+	}
+	
+	
+	/**
+	 * Test url downloads.
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testOldAndNewChemicalRN ()
+	{
+		JSONObject json = new JSONObject ();
+		
+		JSONArray array = new JSONArray ();
+		array.add (FILE1);
+		array.add (FILE2);
+		json.put ("files", array);
+		
+		array = new JSONArray ();
+		array.add ("SBML");
+		array.add ("crnDot");
+		array.add ("reportHtml");
+		json.put ("commands", array);
+
+		JSONObject toReturn = new JSONObject ();
+		JSONArray err = new JSONArray ();
+		
+		try
+		{
+			new WebQueryExecuter ().executeQuery (json, toReturn, err);
+			assertEquals ("err should be empty, but apparently there was an error", 0, err.size ());
+			// for backwards compatibility -> array should contain 3 results (crnDot + reactionsDot = same)
+			assertEquals ("toReturn should contain exactly 3 results", 3, toReturn.size ());
+			
+			assertNotNull ("toReturn should return a dot graph", toReturn.get ("crnDot"));
+			assertTrue ("toReturn should return a non-empty dot graph", ((String) toReturn.get ("crnDot")).length () > 0);
+			assertTrue ("toReturn should return a dot graph of type digraph", ((String) toReturn.get ("crnDot")).toLowerCase ().contains ("digraph"));
+
+			assertNotNull ("toReturn should return an html report", toReturn.get ("reportHtml"));
+			assertTrue ("toReturn should return a non-empty html report", ((String) toReturn.get ("reportHtml")).length () > 0);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace ();
+			fail ("couldn't execute web query: " + e.getMessage ());
+		}
+		
+
+		
+		array = new JSONArray ();
+		array.add ("SBML");
+		array.add ("reactionsDot");
+		array.add ("reportHtml");
+		json.put ("commands", array);
+
+		toReturn = new JSONObject ();
+		err = new JSONArray ();
+		
+		try
+		{
+			new WebQueryExecuter ().executeQuery (json, toReturn, err);
+			assertEquals ("err should be empty, but apparently there was an error", 0, err.size ());
+			assertEquals ("toReturn should contain exactly 2 results", 2, toReturn.size ());
+			
+			assertNotNull ("toReturn should return a dot graph", toReturn.get ("reactionsDot"));
+			assertTrue ("toReturn should return a non-empty dot graph", ((String) toReturn.get ("reactionsDot")).length () > 0);
+			assertTrue ("toReturn should return a dot graph of type digraph", ((String) toReturn.get ("reactionsDot")).toLowerCase ().contains ("digraph"));
+
+			assertNotNull ("toReturn should return an html report", toReturn.get ("reportHtml"));
+			assertTrue ("toReturn should return a non-empty html report", ((String) toReturn.get ("reportHtml")).length () > 0);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace ();
+			fail ("couldn't execute web query: " + e.getMessage ());
+		}
+		
+		
 		
 	}
 	
@@ -225,7 +304,8 @@ public class TestWeb
 		{
 			new WebQueryExecuter ().executeQuery (json, toReturn, err);
 			assertEquals ("err should be empty, but apparently there was an error", 0, err.size ());
-			assertEquals ("toReturn should contain exactly 2 results", 2, toReturn.size ());
+			// for backwards compatibility -> array should contain 3 results (crnDot + reactionsDot = same)
+			assertEquals ("toReturn should contain exactly 3 results", 3, toReturn.size ());
 			
 			assertNotNull ("toReturn should return a dot graph", toReturn.get ("crnDot"));
 			assertTrue ("toReturn should return a non-empty dot graph", ((String) toReturn.get ("crnDot")).length () > 0);
