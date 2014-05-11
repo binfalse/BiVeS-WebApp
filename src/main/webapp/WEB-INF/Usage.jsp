@@ -39,7 +39,7 @@ ${commands}
 </pre>
 
 
-<p>an example call to compute the diff between two <code>SBML</code> files and ask for the highlighted chemical reaction network encoded in DOT language (<code>crnDot</code>) and the report encoded in HTML (<code>reportHtml</code>)
+<p>an example call to compute the diff between two <code>SBML</code> files and ask for the highlighted reaction network encoded in DOT language (<code>reactionsDot</code>) and the report encoded in HTML (<code>reportHtml</code>)
 using curl might look like:</p>
 
 <pre>
@@ -52,7 +52,7 @@ curl -d '{
 	"commands":
 	[
 		"SBML",
-		"crnDot",
+		"reactionsDot",
 		"reportHtml"
 	]
 }' ${url} | python -mjson.tool
@@ -61,7 +61,7 @@ curl -d '{
 <p>the result will be a JSON object like:</p>
 <pre>
 {
-	"crnDot": "digraph BiVeSexport {[...]}",
+	"reactionsDot": "digraph BiVeSexport {[...]}",
 	"reportHtml": "SBML Differences[...]"
 }
 </pre>
