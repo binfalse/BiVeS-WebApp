@@ -96,8 +96,9 @@ public class Query
 		
 		// here comes the magic :D
 		request.setCharacterEncoding ("UTF-8");
+		response.setContentType ("application/json; charset=utf-8");
+		response.setCharacterEncoding ("UTF-8");
 		PrintWriter out = response.getWriter ();
-		response.setContentType ("application/json");
 		
 		// toReturn will contain the results
 		toReturn = new JSONObject ();
