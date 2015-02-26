@@ -3,18 +3,12 @@
  */
 package de.unirostock.sems.bives.webservice;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.Vector;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,10 +38,11 @@ public class WebQueryExecuter
 	/** JSON key carrying the requests. */
 	public static final String	REQ_WANT		= "commands";
 	
-	/** Pattern to distinguish xml files from URLs */
+	/** Pattern to distinguish xml files from URLs. */
 	public static final Pattern	XML_PATTERN	= Pattern.compile ("^\\s*<.*",
 																						Pattern.DOTALL);
 	
+	/** The Constant NEWLINE. */
 	public static final String NEWLINE = System.getProperty("line.separator");
 	
 	/** The executer. */
@@ -205,13 +200,16 @@ public class WebQueryExecuter
     }
     catch (Exception e)
     {
+    	LOGGER.error (e, "cannot execute query on bives web service");
     	err.add ("cannot execute: " + e);
     	throw e;
     }
     
   	for (Exception e : errors)
+  	{
+  		LOGGER.error (e, "experienced errors");
   		err.add ("ERROR: " + e);
-		
+  	}
 		// done...
 	}
 	
