@@ -19,6 +19,7 @@ import org.json.simple.JSONObject;
 import de.binfalse.bflog.LOGGER;
 import de.binfalse.bfutils.FileRetriever;
 import de.binfalse.bfutils.GeneralTools;
+import de.unirostock.sems.bives.BivesOption;
 import de.unirostock.sems.bives.Executer;
 
 
@@ -142,7 +143,7 @@ public class WebQueryExecuter
     	// END backwards compatibility			
 			
 			
-			Executer.Option o = exe.get (arg);
+			BivesOption o = exe.get (arg);
 			if (o == null)
 				throw new IllegalArgumentException ("don't understand option: "
 					+ jArr.get (i));
@@ -222,8 +223,8 @@ public class WebQueryExecuter
 	public final void usage (HttpServletRequest request)
 	{
 		
-		HashMap<String, Executer.Option> options = exe.getOptions ();
-		HashMap<String, Executer.Option> addOptions = exe.getAddOptions ();
+		HashMap<String, BivesOption> options = exe.getOptions ();
+		HashMap<String, BivesOption> addOptions = exe.getAddOptions ();
 		
 		StringBuilder str = new StringBuilder (NEWLINE);
 		
