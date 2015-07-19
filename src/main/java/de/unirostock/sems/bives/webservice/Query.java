@@ -154,7 +154,7 @@ public class Query
 		if (LOGGER.isDebugEnabled ())
 			debugRequest (request);
 		
-		new WebQueryExecuter ().usage (request);
+		request.setAttribute ("commands", new WebQueryExecuter ().usage ());
 		request.setAttribute ("url", request.getRequestURL());
 		
 		request.getRequestDispatcher ("/WEB-INF/Usage.jsp").forward (request, response);

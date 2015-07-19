@@ -15,11 +15,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.Test;
 
 import de.binfalse.bflog.LOGGER;
+import de.unirostock.sems.bives.Executer;
 
 
 /**
@@ -258,6 +261,31 @@ public class TestWeb
 		
 		
 	}
+	
+	@Test
+	public void testHelp ()
+	{
+		String usage = new WebQueryExecuter ().usage ();
+		String [] ulines = usage.split ("\n");
+		assertTrue ("expected some more usage lines", ulines.length > 10);
+		
+		Options options = new Executer ().getOptions ();
+		for (Option o : options.getOptions ())
+		{
+
+			if (
+				o.getLongOpt ().equals (Executer.REQ_DEBUG) || 
+				o.getLongOpt ().equals (Executer.REQ_JSON) || 
+				o.getLongOpt ().equals (Executer.REQ_XML) || 
+				o.getLongOpt ().equals (Executer.REQ_OUT) || 
+				o.getLongOpt ().equals (Executer.REQ_HELP) || 
+				o.getLongOpt ().equals (Executer.REQ_DEBUGG)
+				)
+				continue;
+			assertTrue ("couldn't find option " + o.getLongOpt (), usage.contains (o.getLongOpt ()));
+		}
+	}
+	
 	
 	/**
 	 * Test xml strings.

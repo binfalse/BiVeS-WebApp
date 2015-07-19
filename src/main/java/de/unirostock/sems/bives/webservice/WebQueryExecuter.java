@@ -13,14 +13,17 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import de.binfalse.bflog.LOGGER;
 import de.binfalse.bfutils.FileRetriever;
 import de.binfalse.bfutils.GeneralTools;
-import de.unirostock.sems.bives.BivesOption;
 import de.unirostock.sems.bives.Executer;
+import de.unirostock.sems.bives.Main;
 
 
 
@@ -78,76 +81,16 @@ public class WebQueryExecuter
 		throws Exception
 	{
 		// check what we have to do
-		int wanted = 0;
 		JSONArray jArr = (JSONArray) jObj.get (REQ_WANT);
-    // check for backwards compatibility (we moved from crn to rn)
-    boolean chemicalReactionNetwork = false;
+    List<String> args = new ArrayList<String> ();
     
 		LOGGER.setMinLevel (LOGGER.ERROR);
 		for (int i = 0; i < jArr.size (); i++)
 		{
 			String arg = ((String) jArr.get (i));
 			
-			if ((arg).equals ("verbose"))
-			{
-				LOGGER.setMinLevel (LOGGER.INFO);
-				LOGGER.info ("set info");
-				continue;
-			}
-
-			if ((arg).equals ("stacktrace"))
-			{
-				LOGGER.setLogStackTrace (true);;
-				LOGGER.info ("set stack trace");
-				continue;
-			}
 			
-
-    	// START backwards compatibility
-    	if ((arg).equals ("crnGraphml"))
-    	{
-    		wanted |= Executer.WANT_REACTION_GRAPHML;
-    		chemicalReactionNetwork = true;
-    		continue;
-    	}
-    	if ((arg).equals ("crnDot"))
-    	{
-    		wanted |= Executer.WANT_REACTION_DOT;
-    		chemicalReactionNetwork = true;
-    		continue;
-    	}
-    	if ((arg).equals ("crnJson"))
-    	{
-    		wanted |= Executer.WANT_REACTION_JSON;
-    		chemicalReactionNetwork = true;
-    		continue;
-    	}
-    	if ((arg).equals ("singleCrnGraphml"))
-    	{
-    		wanted |= Executer.WANT_SINGLE_REACTION_GRAPHML;
-    		chemicalReactionNetwork = true;
-    		continue;
-    	}
-    	if ((arg).equals ("singleCrnDot"))
-    	{
-    		wanted |= Executer.WANT_SINGLE_REACTION_DOT;
-    		chemicalReactionNetwork = true;
-    		continue;
-    	}
-    	if ((arg).equals ("singleCrnJson"))
-    	{
-    		wanted |= Executer.WANT_SINGLE_REACTION_JSON;
-    		chemicalReactionNetwork = true;
-    		continue;
-    	}
-    	// END backwards compatibility			
-			
-			
-			BivesOption o = exe.get (arg);
-			if (o == null)
-				throw new IllegalArgumentException ("don't understand option: "
-					+ jArr.get (i));
-			wanted |= o.value;
+			args.add ("--" + arg);
 		}
 		
 		// which files to use?
@@ -161,9 +104,17 @@ public class WebQueryExecuter
 			throw new IllegalArgumentException (
 				"found more than 2 files, not supported.");
 		
-		if (wanted < 1)
+		for (Object o : jArr)
+			args.add ((String) o);
+		
+		String [] arguments = new String [args.size ()];
+		for (int i = 0; i < arguments.length; i++)
+			arguments[i] = args.get (i);
+		CommandLine line = Main.parseCommandLine (arguments, exe);
+		
+		/*if (wanted < 1)
 			throw new IllegalArgumentException (
-				"nothing to do. (no options provided?)");
+				"nothing to do. (no options provided?)");*/
 
     List<Exception> errors = new ArrayList<Exception> ();
 		// single or compare mode?
@@ -171,32 +122,12 @@ public class WebQueryExecuter
     {
 			if (jArr.size () == 1)
 			{
-				exe.executeSingle ((String) jArr.get (0), toReturn, wanted, errors);
-	    	// check for backwards compatibility
-	    	if (chemicalReactionNetwork)
-	    	{
-	    		if (toReturn.get (Executer.REQ_WANT_SINGLE_REACTIONS_GRAPHML) != null)
-	    			toReturn.put ("singleCrnGraphml", toReturn.get (Executer.REQ_WANT_SINGLE_REACTIONS_GRAPHML));
-	    		if (toReturn.get (Executer.REQ_WANT_SINGLE_REACTIONS_JSON) != null)
-	    			toReturn.put ("singleCrnJson", toReturn.get (Executer.REQ_WANT_SINGLE_REACTIONS_JSON));
-	    		if (toReturn.get (Executer.REQ_WANT_SINGLE_REACTIONS_DOT) != null)
-	    			toReturn.put ("singleCrnDot", toReturn.get (Executer.REQ_WANT_SINGLE_REACTIONS_DOT));
-	    	}
+				exe.executeSingle ((String) jArr.get (0), toReturn, line, errors);
 			}
 			else
 			{
 				exe.executeCompare ((String) jArr.get (0), (String) jArr.get (1), toReturn,
-					wanted, errors);
-	    	// check for backwards compatibility
-	    	if (chemicalReactionNetwork)
-	    	{
-	    		if (toReturn.get (Executer.REQ_WANT_REACTIONS_GRAPHML) != null)
-	    			toReturn.put ("crnGraphml", toReturn.get (Executer.REQ_WANT_REACTIONS_GRAPHML));
-	    		if (toReturn.get (Executer.REQ_WANT_REACTIONS_JSON) != null)
-	    			toReturn.put ("crnJson", toReturn.get (Executer.REQ_WANT_REACTIONS_JSON));
-	    		if (toReturn.get (Executer.REQ_WANT_REACTIONS_DOT) != null)
-	    			toReturn.put ("crnDot", toReturn.get (Executer.REQ_WANT_REACTIONS_DOT));
-	    	}
+					line, errors);
 			}
     }
     catch (Exception e)
@@ -220,33 +151,99 @@ public class WebQueryExecuter
 	 *
 	 * @param request the servlet request
 	 */
-	public final void usage (HttpServletRequest request)
+	public final String usage ()
 	{
 		
-		HashMap<String, BivesOption> options = exe.getOptions ();
-		HashMap<String, BivesOption> addOptions = exe.getAddOptions ();
+		Options options = exe.getOptions ();
+		HashMap<String, Option> comparison = new HashMap<String, Option> ();
+		HashMap<String, Option> single = new HashMap<String, Option> ();
+		HashMap<String, Option> server = new HashMap<String, Option> ();
+		HashMap<String, Option> general = new HashMap<String, Option> ();
+		
+		for (Option o : options.getOptions ())
+		{
+			if (
+				o.getLongOpt ().equals (Executer.REQ_DEBUG) || 
+				o.getLongOpt ().equals (Executer.REQ_JSON) || 
+				o.getLongOpt ().equals (Executer.REQ_XML) || 
+				o.getLongOpt ().equals (Executer.REQ_OUT) || 
+				o.getLongOpt ().equals (Executer.REQ_HELP) || 
+				o.getLongOpt ().equals (Executer.REQ_DEBUGG)
+				)
+				server.put (o.getLongOpt (), o);
+			
+			
+			else if (
+				o.getLongOpt ().equals (Executer.REQ_WANT_CELLML) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_REGULAR) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_DOCUMENTTYPE) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_META) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_SBML)
+				)
+				general.put (o.getLongOpt (), o);
+			
+			
+			else if (
+				o.getLongOpt ().equals (Executer.REQ_WANT_SINGLE_COMP_HIERARCHY_DOT) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_SINGLE_COMP_HIERARCHY_GRAPHML) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_SINGLE_COMP_HIERARCHY_JSON) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_SINGLE_FLATTEN) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_SINGLE_REACTIONS_DOT) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_SINGLE_REACTIONS_GRAPHML) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_SINGLE_REACTIONS_JSON) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_SINGLE_REACTIONS_DOT2) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_SINGLE_REACTIONS_GRAPHML2) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_SINGLE_REACTIONS_JSON2) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_SINGLE_COMP_HIERARCHY_DOT)
+				)
+				single.put (o.getLongOpt (), o);
+			
+			
+			else if (
+				o.getLongOpt ().equals (Executer.REQ_WANT_DIFF) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_REPORT_MD) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_REPORT_RST) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_REPORT_HTML) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_REPORT_HTML_FP) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_REACTIONS_DOT) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_REACTIONS_GRAPHML) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_REACTIONS_JSON) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_REACTIONS_DOT2) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_REACTIONS_GRAPHML2) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_REACTIONS_JSON2) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_COMP_HIERARCHY_DOT) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_COMP_HIERARCHY_GRAPHML) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_COMP_HIERARCHY_JSON) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_NEGLECT_NAMES) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_MATCHING_IDS) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_STRICT_NAMES) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_COMP_HIERARCHY_DOT)
+				
+				)
+				comparison.put (o.getLongOpt (), o);
+			
+			
+			else
+				LOGGER.error ("didn't process all possible options : " + o);
+		}
 		
 		StringBuilder str = new StringBuilder (NEWLINE);
 		
-		SortedSet<String> keys = new TreeSet<String> (options.keySet ());
+		SortedSet<String> compOptions = new TreeSet<String> (comparison.keySet ());
 		int longest = 0;
-		for (String key : keys)
+		for (String key : compOptions)
 		{
 			if (key.length () > longest)
 				longest = key.length ();
 		}
-		SortedSet<String> addKeys = new TreeSet<String> (addOptions.keySet ());
-		for (String key : addKeys)
+		SortedSet<String> singleOptions = new TreeSet<String> (single.keySet ());
+		for (String key : singleOptions)
 		{
 			if (key.length () > longest)
 				longest = key.length ();
 		}
-		
-
-		Map<String, String> server = new HashMap<String, String> ();
-		server.put ("verbose", "write more information to the log files");
-		server.put ("stacktrace", "also log stack traces");
-		for (String key : server.keySet ())
+		SortedSet<String> generalOptions = new TreeSet<String> (general.keySet ());
+		for (String key : generalOptions)
 		{
 			if (key.length () > longest)
 				longest = key.length ();
@@ -257,37 +254,36 @@ public class WebQueryExecuter
 		
 		str.append ("COMPARISON COMMANDS").append (NEWLINE);
 		
-		for (String key : keys)
+		for (String key : compOptions)
 			str.append ("\t")
 			.append (key)
 			.append (GeneralTools.repeat (" ", longest - key.length ()))
-			.append (options.get (key).description)
+			.append (comparison.get (key).getDescription ())
 			.append (NEWLINE);
 		str.append (NEWLINE);
 		
 		str.append ("ADDITIONAL COMMANDS for single files").append (NEWLINE);
-		for (String key : addKeys)
+		for (String key : singleOptions)
 		{
 			str.append ("\t")
 			.append (key)
 			.append (GeneralTools.repeat (" ", longest - key.length ()))
-			.append (addOptions.get (key).description)
+			.append (single.get (key).getDescription ())
 			.append (NEWLINE);
 		}
 		str.append (NEWLINE);
 
-		str.append ("SERVER COMMANDS").append (NEWLINE);
+		str.append ("GENERAL OPTIONS").append (NEWLINE);
 		
-		for (String key : server.keySet ())
+		for (String key : generalOptions)
 		{
 			str.append ("\t")
 			.append (key)
 			.append (GeneralTools.repeat (" ", longest - key.length ()))
-			.append (server.get (key))
+			.append (general.get (key).getDescription ())
 			.append (NEWLINE);
 		}
 		
-		
-		request.setAttribute ("commands", str.toString ());
+		return str.toString ();
 	}
 }
