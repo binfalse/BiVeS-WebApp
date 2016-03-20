@@ -149,7 +149,7 @@ public class WebQueryExecuter
 	/**
 	 * Prepares the usage including an example.
 	 *
-	 * @param request the servlet request
+	 * @return the string
 	 */
 	public final String usage ()
 	{
@@ -201,6 +201,8 @@ public class WebQueryExecuter
 			
 			else if (
 				o.getLongOpt ().equals (Executer.REQ_WANT_DIFF) ||
+				o.getLongOpt ().equals (Executer.REQ_INC_ANNO) ||
+				o.getLongOpt ().equals (Executer.REQ_SEP_ANNO) ||
 				o.getLongOpt ().equals (Executer.REQ_WANT_REPORT_MD) ||
 				o.getLongOpt ().equals (Executer.REQ_WANT_REPORT_RST) ||
 				o.getLongOpt ().equals (Executer.REQ_WANT_REPORT_HTML) ||

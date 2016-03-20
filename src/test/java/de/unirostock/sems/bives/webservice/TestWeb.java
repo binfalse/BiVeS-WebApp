@@ -262,6 +262,9 @@ public class TestWeb
 		
 	}
 	
+	/**
+	 * Test help.
+	 */
 	@Test
 	public void testHelp ()
 	{
