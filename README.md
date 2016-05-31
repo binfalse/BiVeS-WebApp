@@ -31,11 +31,32 @@ to obtain the `war` file that can be deployed to a JAVA compliant webserver, suc
 Pre-compiled Java binaries can be found at http://bin.sems.uni-rostock.de/BiVeS-WebApp/
 
 ### DOCKER image
-Since version `1.6.2` we provide a DOCKER image at [the docker hub: binfalse/bives-webapp](https://hub.docker.com/r/binfalse/bives-webapp/). Using Docker it is very easy and clean to run the web application. do not hesitate to contact us if you need assistance.
+Since version `1.6.2` we provide a DOCKER image at [the docker hub: binfalse/bives-webapp](https://hub.docker.com/r/binfalse/bives-webapp/). This image is automatically generated with every release of the BiVeS web application.
 
+Using Docker it is very easy and clean to run the web application. Do not hesitate to contact us if you need assistance.
 
+## Usage
+The BiVeS web application expects an HTTP POST request with a job encoded in JSON. To for example compare the two files at `http://budhat.sems.uni-rostock.de/download?downloadModel=24` and `http://budhat.sems.uni-rostock.de/download?downloadModel=25` asking for the HTML report you could launch the following `curl` call:
+
+    curl -d '{
+    	"files":
+    	[
+    		"http://budhat.sems.uni-rostock.de/download?downloadModel=24",
+    		"http://budhat.sems.uni-rostock.de/download?downloadModel=25"
+    	],
+    	"commands":
+    	[
+    		"reportHtml"
+    	]
+    }' http://YOUR.BIVES.WEBAPP
+
+Just replace `http://YOUR.BIVES.WEBAPP` with the URL to your installation of the BiVeS WebApp (or take our installation at http://bives.sems.uni-rostock.de).
+
+You'll get more information about the usage and possible options/arguments by browsing to that installation with using your preferred web browser, [see our installation for example](http://bives.sems.uni-rostock.de).
+
+There is a [Java WebApp client](https://github.com/binfalse/BiVeS-WebApp-Client) for accessing the BiVeS WebApp from java based tools.
 
 ## More Information
 
-To learn more about BiVeS
+To learn more about BiVeS have a look at the [BiVeS project](https://github.com/binfalse/BiVeS/) and our [open-access scientific publication](http://bioinformatics.oxfordjournals.org/content/32/4/563.full.pdf+html).
 
