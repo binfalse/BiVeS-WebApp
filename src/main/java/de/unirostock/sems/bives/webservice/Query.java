@@ -6,9 +6,11 @@ package de.unirostock.sems.bives.webservice;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Properties;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -25,6 +27,7 @@ import org.json.simple.parser.ParseException;
 
 import de.binfalse.bflog.LOGGER;
 import de.binfalse.bfutils.FileRetriever;
+import de.unirostock.sems.bives.tools.BivesTools;
 
 
 
@@ -45,7 +48,33 @@ public class Query
 	
 	/** err will -- wait for it -- collect errors. */
 	private JSONArray					err;
+
 	
+	/** The version of this library. */
+	public static String	WEBAPP_VERSION	= "unknown";
+	
+	static
+	{
+		// read the current version of the webapp
+		InputStream in = Query.class
+			.getResourceAsStream ("/bives-webapp-version.properties");
+		if (in != null)
+		{
+			Properties prop = new Properties ();
+			try
+			{
+				prop.load (in);
+				String v = (String) prop.get ("version");
+				if (v != null && v.length () > 0)
+					WEBAPP_VERSION = v;
+				in.close ();
+			}
+			catch (IOException e)
+			{
+				LOGGER.warn (e, "wasn't able to open BiVeS web app version file");
+			}
+		}
+	}
 	
 	/**
 	 * Parses the JSON request.
@@ -156,6 +185,8 @@ public class Query
 		
 		request.setAttribute ("commands", new WebQueryExecuter ().usage ());
 		request.setAttribute ("url", request.getRequestURL());
+		request.setAttribute ("webappversion", WEBAPP_VERSION);
+		request.setAttribute ("bivesversion", BivesTools.getBivesVersion ());
 		
 		request.getRequestDispatcher ("/WEB-INF/Usage.jsp").forward (request, response);
 	}
