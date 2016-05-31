@@ -5,7 +5,7 @@
 
     <property name="app.name" value="BiVeS-WS" />
     <property name="app.path" value="/${app.name}" />
-    <property name="app.version" value="1.6.1" />
+    <property name="app.version" value="1.6.3" />
     <property name="build.home" value="${basedir}/build" />
     <property name="dist.home" value="${basedir}/dist" />
     <property name="src.home" value="${basedir}/src/main/java" />
