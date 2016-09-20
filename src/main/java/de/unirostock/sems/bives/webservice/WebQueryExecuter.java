@@ -61,6 +61,7 @@ public class WebQueryExecuter
 		// we don't want to use local files.
 		FileRetriever.FIND_LOCAL = false;
 		exe = new Executer ();
+		LOGGER.setLevel(LOGGER.INFO);
 	}
 	
 	
@@ -213,6 +214,7 @@ public class WebQueryExecuter
 				o.getLongOpt ().equals (Executer.REQ_WANT_REACTIONS_DOT2) ||
 				o.getLongOpt ().equals (Executer.REQ_WANT_REACTIONS_GRAPHML2) ||
 				o.getLongOpt ().equals (Executer.REQ_WANT_REACTIONS_JSON2) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_REACTIONS_SBGN_JSON) ||
 				o.getLongOpt ().equals (Executer.REQ_WANT_COMP_HIERARCHY_DOT) ||
 				o.getLongOpt ().equals (Executer.REQ_WANT_COMP_HIERARCHY_GRAPHML) ||
 				o.getLongOpt ().equals (Executer.REQ_WANT_COMP_HIERARCHY_JSON) ||
