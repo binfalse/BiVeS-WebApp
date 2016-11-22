@@ -3,7 +3,7 @@
     <groupId>de.unirostock.sems</groupId>
     <artifactId>BiVeS-WebApp</artifactId>
     <packaging>war</packaging>
-    <version>1.6.3</version>
+    <version>1.6.4</version>
     <name>BiVeS-WebApp</name>
     <url>http://sems.uni-rostock.de/projects/bives/</url>
     <developers>
@@ -20,7 +20,7 @@
         <dependency>
             <groupId>de.unirostock.sems</groupId>
             <artifactId>BiVeS</artifactId>
-            <version>1.9.1</version>
+            <version>1.9.2</version>
         </dependency>
         <dependency>
             <groupId>de.binfalse</groupId>
@@ -52,6 +52,14 @@
         </repository>
     </distributionManagement>
     <build>
+        <extensions>
+            <!-- enables ssh/scp support for maven deployment -->
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh</artifactId>
+                <version>2.10</version>
+            </extension>
+        </extensions>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -155,24 +163,24 @@
                                 <configuration>
                                     <target>
                                         <exec executable="docker">
-                                            <arg value="build"/>
-                                            <arg value="-t"/>
-                                            <arg value="binfalse/bives-webapp:${project.version}"/>
-                                            <arg value="target"/>
+                                            <arg value="build" />
+                                            <arg value="-t" />
+                                            <arg value="binfalse/bives-webapp:${project.version}" />
+                                            <arg value="target" />
                                         </exec>
                                         <exec executable="docker">
-                                            <arg value="push"/>
-                                            <arg value="binfalse/bives-webapp:${project.version}"/>
+                                            <arg value="push" />
+                                            <arg value="binfalse/bives-webapp:${project.version}" />
                                         </exec>
                                         <exec executable="docker">
-                                            <arg value="tag"/>
-                                            <arg value="-f"/>
-                                            <arg value="binfalse/bives-webapp:${project.version}"/>
-                                            <arg value="binfalse/bives-webapp:latest"/>
+                                            <arg value="tag" />
+                                            <arg value="-f" />
+                                            <arg value="binfalse/bives-webapp:${project.version}" />
+                                            <arg value="binfalse/bives-webapp:latest" />
                                         </exec>
                                         <exec executable="docker">
-                                            <arg value="push"/>
-                                            <arg value="binfalse/bives-webapp:latest"/>
+                                            <arg value="push" />
+                                            <arg value="binfalse/bives-webapp:latest" />
                                         </exec>
                                     </target>
                                 </configuration>
