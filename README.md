@@ -70,6 +70,13 @@ You'll get more information about the usage and possible options/arguments by br
 There is a [Java WebApp client](https://github.com/binfalse/BiVeS-WebApp-Client) for accessing the BiVeS WebApp from java based tools.
 
 
+## Monitoring
+
+If you try to access `/` through an HTTP GET request BiVeS will return a `400 Bad Request` status, signalling applications that something's missing and show a *usage* page in your web browser.
+That's of course pretty difficult to monitoring for health..
+Therefore we implemented `/status` that will return `200 OK` and tell you the BiVeS version that it's running at the moment.
+You could even evaluate it's content and check for the phrase *running just fine* :)
+
 
 ## Request for comments
 
