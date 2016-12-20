@@ -174,9 +174,7 @@ public class Query
 			IOException
 	{
 		// this will just print the usage
-		response.setContentType ("text/html");
 		request.setCharacterEncoding ("UTF-8");
-		response.setStatus (HttpServletResponse.SC_BAD_REQUEST);
 		
 		// just to learn how a request looks like:
 		// LOGGER.setMinLevel (LOGGER.DEBUG);
@@ -188,7 +186,18 @@ public class Query
 		request.setAttribute ("webappversion", WEBAPP_VERSION);
 		request.setAttribute ("bivesversion", BivesTools.getBivesVersion ());
 		
-		request.getRequestDispatcher ("/WEB-INF/Usage.jsp").forward (request, response);
+
+		if (request.getRequestURL ().toString ().contains ("status"))
+		{
+			response.setContentType ("text/plain");
+			request.getRequestDispatcher ("/WEB-INF/Status.jsp").forward (request, response);
+		}
+		else
+		{
+			response.setContentType ("text/html");
+			response.setStatus (HttpServletResponse.SC_BAD_REQUEST);
+			request.getRequestDispatcher ("/WEB-INF/Usage.jsp").forward (request, response);
+		}
 	}
 	
 	
