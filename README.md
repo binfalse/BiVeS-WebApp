@@ -30,10 +30,23 @@ to obtain the `war` file that can be deployed to a JAVA compliant webserver, suc
 ### Java Binaries
 Pre-compiled Java binaries can be found at http://bin.sems.uni-rostock.de/BiVeS-WebApp/
 
-### DOCKER image
-Since version `1.6.2` we provide a DOCKER image at [the docker hub: binfalse/bives-webapp](https://hub.docker.com/r/binfalse/bives-webapp/). This image is automatically generated with every release of the BiVeS web application.
+### Docker image
+Since version `1.6.2` we provide a Docker image at [the docker hub: binfalse/bives-webapp](https://hub.docker.com/r/binfalse/bives-webapp/).
+The image is based on an [Apache Tomcat image](https://hub.docker.com/r/library/tomcat/) and already has the BiVeS web application deployed as the default webapp of the Tomcat.
 
-Using Docker it is very easy and clean to run the web application. Do not hesitate to contact us if you need assistance.
+It will be automatically generated with every git-commit to this repository.
+In addition, we are generated a new version with every release of the BiVeS web application [through maven](https://binfalse.de/2016/05/31/mvn-automagically-create-a-docker-image/)..
+
+Using Docker it is very easy and clean to run the web application.
+Just call
+
+    docker run -it --rm -p 1234:8080 binfalse/bives-webapp
+
+and a Tomcat will start and bind to port `1234` of your machine.
+Go ahead and open [http://localhost:1234](http://localhost:1234) to see if it's working! :)
+
+Do not hesitate to contact us if you need assistance.
+
 
 ## Usage
 The BiVeS web application expects an HTTP POST request with a job encoded in JSON. To for example compare the two files at `http://budhat.sems.uni-rostock.de/download?downloadModel=24` and `http://budhat.sems.uni-rostock.de/download?downloadModel=25` asking for the HTML report you could launch the following `curl` call:
@@ -55,6 +68,13 @@ Just replace `http://YOUR.BIVES.WEBAPP` with the URL to your installation of the
 You'll get more information about the usage and possible options/arguments by browsing to that installation with using your preferred web browser, [see our installation for example](http://bives.sems.uni-rostock.de).
 
 There is a [Java WebApp client](https://github.com/binfalse/BiVeS-WebApp-Client) for accessing the BiVeS WebApp from java based tools.
+
+
+
+## Request for comments
+
+We are always keen on getting feedback from our users. If you have any comments, requests for features, or experience any problems do not hesitate to leave a comment.
+
 
 ## More Information
 

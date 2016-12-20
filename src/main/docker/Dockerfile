@@ -5,5 +5,5 @@ MAINTAINER martin scharm
 RUN rm -rf /usr/local/tomcat/webapps/ROOT /usr/local/tomcat/webapps/ROOT.war
 
 # add the BiVeS-WebApp as the new default web app
-COPY BiVeS-WS-${project.version}.war /usr/local/tomcat/webapps/ROOT.war
+COPY BiVeS-WebApp-${project.version}.war /usr/local/tomcat/webapps/ROOT.war
 

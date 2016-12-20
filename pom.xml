@@ -3,7 +3,7 @@
     <groupId>de.unirostock.sems</groupId>
     <artifactId>BiVeS-WebApp</artifactId>
     <packaging>war</packaging>
-    <version>1.6.4</version>
+    <version>1.6.5</version>
     <name>BiVeS-WebApp</name>
     <url>http://sems.uni-rostock.de/projects/bives/</url>
     <developers>
@@ -191,16 +191,6 @@
                                         <exec executable="docker">
                                             <arg value="push" />
                                             <arg value="binfalse/bives-webapp:${project.version}" />
-                                        </exec>
-                                        <exec executable="docker">
-                                            <arg value="tag" />
-                                            <arg value="-f" />
-                                            <arg value="binfalse/bives-webapp:${project.version}" />
-                                            <arg value="binfalse/bives-webapp:latest" />
-                                        </exec>
-                                        <exec executable="docker">
-                                            <arg value="push" />
-                                            <arg value="binfalse/bives-webapp:latest" />
                                         </exec>
                                     </target>
                                 </configuration>
