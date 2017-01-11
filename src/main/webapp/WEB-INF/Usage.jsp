@@ -3,7 +3,7 @@
 
 <html>
 	<head>
-		<title>BiVeS WebService USAGE</title>
+		<title>BiVeS WebApp USAGE</title>
 		<style>
 			p{max-width:50em;}
 			pre{font-size:.9em;background-color: #ddd;padding: 20px;}
@@ -65,5 +65,7 @@ curl -d '{
 	"reportHtml": "SBML Differences[...]"
 }
 </pre>
+
+<p>This is version ${webappversion} of the BiVeS WebApp, including ${bivesversion}</p>
 </body>
 </html>
