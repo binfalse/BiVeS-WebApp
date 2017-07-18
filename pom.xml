@@ -3,7 +3,7 @@
     <groupId>de.unirostock.sems</groupId>
     <artifactId>BiVeS-WebApp</artifactId>
     <packaging>war</packaging>
-    <version>1.7.5</version>
+    <version>1.7.6</version>
     <name>BiVeS-WebApp</name>
     <url>http://sems.uni-rostock.de/projects/bives/</url>
     <developers>
@@ -20,7 +20,7 @@
         <dependency>
             <groupId>de.unirostock.sems</groupId>
             <artifactId>BiVeS</artifactId>
-            <version>1.11.0</version>
+            <version>1.11.1</version>
         </dependency>
         <dependency>
             <groupId>de.binfalse</groupId>
