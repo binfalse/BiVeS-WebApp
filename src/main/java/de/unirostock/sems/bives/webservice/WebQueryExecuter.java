@@ -173,14 +173,14 @@ public class WebQueryExecuter
 			else if (
 				o.getLongOpt ().equals (Executer.REQ_WANT_CELLML) ||
 				o.getLongOpt ().equals (Executer.REQ_WANT_REGULAR) ||
-				o.getLongOpt ().equals (Executer.REQ_WANT_DOCUMENTTYPE) ||
-				o.getLongOpt ().equals (Executer.REQ_WANT_META) ||
 				o.getLongOpt ().equals (Executer.REQ_WANT_SBML)
 				)
 				general.put (o.getLongOpt (), o);
 			
 			
 			else if (
+				o.getLongOpt ().equals (Executer.REQ_WANT_DOCUMENTTYPE) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_META) ||
 				o.getLongOpt ().equals (Executer.REQ_WANT_SINGLE_COMP_HIERARCHY_DOT) ||
 				o.getLongOpt ().equals (Executer.REQ_WANT_SINGLE_COMP_HIERARCHY_GRAPHML) ||
 				o.getLongOpt ().equals (Executer.REQ_WANT_SINGLE_COMP_HIERARCHY_JSON) ||
