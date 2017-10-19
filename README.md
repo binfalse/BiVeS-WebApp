@@ -103,6 +103,7 @@ We are always keen on getting feedback from our users. If you have any comments,
 
 To learn more about BiVeS have a look at the [BiVeS project](https://github.com/binfalse/BiVeS/) and our [open-access scientific publication](http://bioinformatics.oxfordjournals.org/content/32/4/563.full.pdf+html).
 
+The [GitHub pages of the SEMS project](https://semsproject.github.io/BiVeS-WS/) provide mode information on the BiVeS WebApp.
 
 
 ## LICENSE
