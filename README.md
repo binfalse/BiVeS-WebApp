@@ -1,5 +1,5 @@
 # BiVeS-WebApp
-This is the BiVeS web application, a JAVA based web interface to the [BiVeS tool](https://github.com/binfalse/BiVeS) for difference detection between versions of computational models.
+This is the BiVeS web application, a JAVA based web interface to the ![bives logo](https://sems.uni-rostock.de/wp-content/uploads/2012/12/logo-icon-16.png) [BiVeS tool](https://github.com/binfalse/BiVeS) for difference detection between versions of computational models.
 
 ## BiVeS consists of several modules
 
