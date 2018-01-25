@@ -34,10 +34,10 @@ public class TestWeb
 {
 	
 	/** The Constant FILE1. */
-	public static final String FILE1 = "http://budhat.sems.uni-rostock.de/download?downloadModel=24";
+	public static final String FILE1 = "https://budhat.bio.informatik.uni-rostock.de/download?downloadModel=24";
 	
 	/** The Constant FILE2. */
-	public static final String FILE2 = "http://budhat.sems.uni-rostock.de/download?downloadModel=25";
+	public static final String FILE2 = "http://budhat.bio.informatik.uni-rostock.de/download?downloadModel=25";
 	
 	/**
 	 * Instantiates a new test class.
