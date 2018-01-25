@@ -182,9 +182,18 @@ public class Query
 			debugRequest (request);
 		
 		request.setAttribute ("commands", new WebQueryExecuter ().usage ());
-		request.setAttribute ("url", request.getRequestURL());
 		request.setAttribute ("webappversion", WEBAPP_VERSION);
 		request.setAttribute ("bivesversion", BivesTools.getBivesVersion ());
+		
+		String url = request.getRequestURL().toString ();
+		if (request.getHeader ("x-forwarded-proto") != null)
+		{
+			String targetProto = request.getHeader ("x-forwarded-proto");
+			if (!url.startsWith (targetProto + "://")) {
+				url = url.replaceFirst ("^[^:]*://", targetProto + "://");
+			}
+		}
+		request.setAttribute ("url", url);
 		
 
 		if (request.getRequestURL ().toString ().contains ("status"))
