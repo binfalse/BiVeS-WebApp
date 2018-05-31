@@ -1,0 +1,19 @@
+<!--
+	This is a sample context configuration for tomcat.
+	It can be inserted into the context.xml, but it highly recommended to store it in
+	
+	$CATALINA_BASE/conf/[enginename]/[hostname]/BiVeS-WebApp.xml
+	
+-->
+<Context>
+	
+	<!-- who maintains this instance? -->
+	<Parameter name="MAINTAINER" value="unkown" override="false" />
+	
+	<!-- web page of the maintainer -->
+	<Parameter name="MAINTAINER_URL" value="#" override="false" />
+	
+	<!-- imprint of the maintainer -->
+	<Parameter name="IMPRINT_URL" value="#" override="false" />
+
+</Context>

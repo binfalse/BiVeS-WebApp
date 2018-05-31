@@ -61,6 +61,12 @@ Just call
 and a Tomcat will start and bind to port `1234` of your machine.
 Go ahead and open [http://localhost:1234](http://localhost:1234) to see if it's working! :)
 
+You should, however, also mount a config file into the container at `/usr/local/tomcat/conf/Catalina/localhost/ROOT.xml`, which tells the visitors who's running the website (including a link to an imprint):
+
+    docker run -it --rm -p 1234:8080 -v /path/to/your.xml:/usr/local/tomcat/conf/Catalina/localhost/ROOT.xml binfalse/bives-webapp
+
+An example config file can be found at [`src/main/docker/BiVeS-WebApp-DockerContext.xml`](src/main/docker/BiVeS-WebApp-DockerContext.xml).
+
 Do not hesitate to contact us if you need assistance.
 
 

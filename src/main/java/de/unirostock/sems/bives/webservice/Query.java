@@ -14,6 +14,7 @@ import java.util.Properties;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -185,6 +186,12 @@ public class Query
 		request.setAttribute ("webappversion", WEBAPP_VERSION);
 		request.setAttribute ("bivesversion", BivesTools.getBivesVersion ());
 		
+		// load settings
+		ServletContext context = this.getServletContext();
+		request.setAttribute ("maintainer", context.getInitParameter ("MAINTAINER"));
+		request.setAttribute ("maintainerurl", context.getInitParameter ("MAINTAINER_URL"));
+		request.setAttribute ("imprint", context.getInitParameter ("IMPRINT_URL"));
+
 		String url = request.getRequestURL().toString ();
 		if (request.getHeader ("x-forwarded-proto") != null)
 		{

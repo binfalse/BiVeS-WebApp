@@ -6,7 +6,21 @@
     <description>
         BiVeS Servlet providing a Web Service
     </description>
-  
+	
+	<context-param>
+		<param-name>MAINTAINER</param-name>
+		<param-value>Martin Scharm</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>MAINTAINER_URL</param-name>
+		<param-value>https://www.sbi.uni-rostock.de/team/detail/martin-scharm</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>IMPRINT_URL</param-name>
+		<param-value>https://www.sbi.uni-rostock.de/imprint</param-value>
+	</context-param>
   
     <servlet>
         <servlet-name>Query</servlet-name>

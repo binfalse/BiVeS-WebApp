@@ -3,9 +3,13 @@
     <groupId>de.uni-rostock.sbi</groupId>
     <artifactId>BiVeS-WebApp</artifactId>
     <packaging>war</packaging>
-    <version>1.7.11</version>
+    <version>1.8.0</version>
     <name>BiVeS-WebApp</name>
     <url>http://sems.uni-rostock.de/projects/bives/</url>
+    <properties>
+	    <maven.compiler.source>1.6</maven.compiler.source>
+	    <maven.compiler.target>1.6</maven.compiler.target>
+	</properties>
     <description>
         BiVeS - BioModel Version Control System
         This package provides a web application for comparison of computational models
@@ -39,7 +43,7 @@
         <dependency>
             <groupId>de.uni-rostock.sbi</groupId>
             <artifactId>BiVeS</artifactId>
-            <version>1.11.3</version>
+            <version>1.11.4</version>
         </dependency>
         <dependency>
             <groupId>de.binfalse</groupId>
