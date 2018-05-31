@@ -72,7 +72,7 @@ The maintainer of this application may however decide to e.g. keep log files or 
 Please be aware, that BiVeS will retrieve a copy of the data that you send to BiVeS, as BiVeS needs to process the data.
 This data is, however, only used for the processing of your request and will be deleted immediately after you get the results.
 We still strongly recommend to not upload sensitive data!
-Instead, consider <a href="https://github.com/binfalse/bives-webapp">running an own instance of the BiVeS WebApp</a>, which gives you much more control over your data.</p> 
+Instead, consider <a href="https://github.com/binfalse/bives-webapp">running your own instance of the BiVeS WebApp</a>, which gives you much more control over your data.</p> 
 <p>This application is maintained by <a href="${maintainerurl}">${maintainer}</a> &mdash; see <a href="${imprint}">imprint</a>.</p>
 
 
