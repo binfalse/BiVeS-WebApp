@@ -1,4 +1,4 @@
-FROM tomcat:jre8
+FROM tomcat:latest
 MAINTAINER martin scharm
 
 
