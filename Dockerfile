@@ -8,9 +8,8 @@ COPY src/main/docker/BiVeS-WebApp-DockerContext.xml /usr/local/tomcat/conf/Catal
 WORKDIR /srv/
 
 # install dependencies, compile the code, and get rid of dependencies...
-RUN deps="maven openjdk-${JAVA_VERSION%%[^[:digit:]]*}-jdk=$JAVA_DEBIAN_VERSION" \
-	&& apt-get update \
-	&& apt-get install -y --no-install-recommends $deps \
+RUN apt-get update \
+	&& apt-get install -y --no-install-recommends maven \
 	&& mvn package \
 	&& cp target/*war /usr/local/tomcat/webapps/ROOT.war \
 	&& mvn clean \
