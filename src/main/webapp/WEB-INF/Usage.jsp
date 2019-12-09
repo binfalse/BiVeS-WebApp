@@ -66,6 +66,16 @@ curl -d '{
 }
 </pre>
 
+<h3>Privacy and data protection</h3>
+<p>BiVeS is not tracking the user.
+The maintainer of this application may however decide to e.g. keep log files or integrate other kinds of tracking.<br>
+Please be aware, that BiVeS will retrieve a copy of the data that you send to BiVeS, as BiVeS needs to process the data.
+This data is, however, only used for the processing of your request and will be deleted immediately after you get the results.
+We still strongly recommend to not upload sensitive data!
+Instead, consider <a href="https://github.com/binfalse/bives-webapp">running your own instance of the BiVeS WebApp</a>, which gives you much more control over your data.</p> 
+<p>This application is maintained by <a href="${maintainerurl}">${maintainer}</a> &mdash; see <a href="${imprint}">imprint</a>.</p>
+
+
 <p>This is version ${webappversion} of the BiVeS WebApp, including ${bivesversion}</p>
 </body>
 </html>

@@ -1,5 +1,21 @@
 # BiVeS-WebApp
-This is the BiVeS web application, a JAVA based web interface to the [BiVeS tool] for difference detection between versions of computational models.
+This is the BiVeS web application, a JAVA based web interface to the ![bives logo](https://sems.uni-rostock.de/wp-content/uploads/2012/12/logo-icon-16.png) [BiVeS tool](https://github.com/binfalse/BiVeS) for difference detection between versions of computational models.
+
+## BiVeS consists of several modules
+
+![bives modules](https://github.com/binfalse/BiVeS/blob/master/art/dependency-graph.png)
+
+BiVeS itself consists of a number of modules:
+
+* [xmlutils](https://github.com/binfalse/xmlutils) is a library for advanced XML handling
+* [jCOMODI](https://github.com/binfalse/jCOMODI/) provides programmatic access to the [COMODI ontology](http://purl.uni-rostock.de/comodi/)
+* [BiVeS-Core](https://github.com/binfalse/BiVeS-Core) is the core library for comparison of computational models
+* [BiVeS-SBML](https://github.com/binfalse/BiVeS-SBML/) is a module providing special strategies for models encoded in SBML
+* [BiVeS-CellML](https://github.com/binfalse/BiVeS-CellML) is a module providing special strategies for models encoded in CellML
+* [BiVeS](https://github.com/binfalse/BiVeS) ties all modules together and provides command line access
+* [BiVeS-WebApp](https://github.com/binfalse/BiVeS-WebApp) is a web interface to access BiVeS through the network
+* [BiVeS-WebApp-Client](https://github.com/binfalse/BiVeS-WebApp-Client) provides a Java library for comparing models using the BiVeS-WebApp
+
 
 ## Build
 We recommend building the application with Maven.
@@ -45,6 +61,12 @@ Just call
 and a Tomcat will start and bind to port `1234` of your machine.
 Go ahead and open [http://localhost:1234](http://localhost:1234) to see if it's working! :)
 
+You should, however, also mount a config file into the container at `/usr/local/tomcat/conf/Catalina/localhost/ROOT.xml`, which tells the visitors who's running the website (including a link to an imprint):
+
+    docker run -it --rm -p 1234:8080 -v /path/to/your.xml:/usr/local/tomcat/conf/Catalina/localhost/ROOT.xml binfalse/bives-webapp
+
+An example config file can be found at [`src/main/docker/BiVeS-WebApp-DockerContext.xml`](src/main/docker/BiVeS-WebApp-DockerContext.xml).
+
 Do not hesitate to contact us if you need assistance.
 
 
@@ -86,4 +108,28 @@ We are always keen on getting feedback from our users. If you have any comments,
 ## More Information
 
 To learn more about BiVeS have a look at the [BiVeS project](https://github.com/binfalse/BiVeS/) and our [open-access scientific publication](http://bioinformatics.oxfordjournals.org/content/32/4/563.full.pdf+html).
+
+The [GitHub pages of the SEMS project](https://semsproject.github.io/BiVeS-WS/) provide mode information on the BiVeS WebApp.
+
+
+## LICENSE
+
+Artwork and text etc is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/) ![Creative Commons License](https://i.creativecommons.org/l/by-sa/4.0/80x15.png)
+
+The code is licensed under an [Apache 2.0 license](LICENSE):
+
+    Copyright martin scharm <https://binfalse.de/contact/>
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
 

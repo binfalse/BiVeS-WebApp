@@ -6,12 +6,9 @@ package de.unirostock.sems.bives.webservice;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
@@ -61,7 +58,6 @@ public class WebQueryExecuter
 		// we don't want to use local files.
 		FileRetriever.FIND_LOCAL = false;
 		exe = new Executer ();
-		LOGGER.setLevel(LOGGER.INFO);
 	}
 	
 	
@@ -177,14 +173,14 @@ public class WebQueryExecuter
 			else if (
 				o.getLongOpt ().equals (Executer.REQ_WANT_CELLML) ||
 				o.getLongOpt ().equals (Executer.REQ_WANT_REGULAR) ||
-				o.getLongOpt ().equals (Executer.REQ_WANT_DOCUMENTTYPE) ||
-				o.getLongOpt ().equals (Executer.REQ_WANT_META) ||
 				o.getLongOpt ().equals (Executer.REQ_WANT_SBML)
 				)
 				general.put (o.getLongOpt (), o);
 			
 			
 			else if (
+				o.getLongOpt ().equals (Executer.REQ_WANT_DOCUMENTTYPE) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_META) ||
 				o.getLongOpt ().equals (Executer.REQ_WANT_SINGLE_COMP_HIERARCHY_DOT) ||
 				o.getLongOpt ().equals (Executer.REQ_WANT_SINGLE_COMP_HIERARCHY_GRAPHML) ||
 				o.getLongOpt ().equals (Executer.REQ_WANT_SINGLE_COMP_HIERARCHY_JSON) ||

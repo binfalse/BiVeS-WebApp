@@ -1,15 +1,15 @@
-FROM tomcat:jre8
+FROM tomcat:latest
 MAINTAINER martin scharm
 
 
 COPY src /srv/src
 COPY pom.xml /srv/pom.xml
+COPY src/main/docker/BiVeS-WebApp-DockerContext.xml /usr/local/tomcat/conf/Catalina/localhost/ROOT.xml
 WORKDIR /srv/
 
 # install dependencies, compile the code, and get rid of dependencies...
-RUN deps="maven openjdk-${JAVA_VERSION%%[-~bu]*}-jdk=$JAVA_DEBIAN_VERSION" \
-	&& apt-get update \
-	&& apt-get install -y --no-install-recommends $deps \
+RUN apt-get update \
+	&& apt-get install -y --no-install-recommends maven \
 	&& mvn package \
 	&& cp target/*war /usr/local/tomcat/webapps/ROOT.war \
 	&& mvn clean \
