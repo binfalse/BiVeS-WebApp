@@ -198,6 +198,7 @@ public class WebQueryExecuter
 			
 			else if (
 				o.getLongOpt ().equals (Executer.REQ_WANT_DIFF) ||
+				o.getLongOpt ().equals (Executer.REQ_WANT_MERGE) ||
 				o.getLongOpt ().equals (Executer.REQ_INC_ANNO) ||
 				o.getLongOpt ().equals (Executer.REQ_SEP_ANNO) ||
 				o.getLongOpt ().equals (Executer.REQ_WANT_REPORT_MD) ||

@@ -3,12 +3,13 @@
     <groupId>de.uni-rostock.sbi</groupId>
     <artifactId>BiVeS-WebApp</artifactId>
     <packaging>war</packaging>
-    <version>1.9.2</version>
+    <version>1.10.0</version>
     <name>BiVeS-WebApp</name>
     <url>http://sems.uni-rostock.de/projects/bives/</url>
     <properties>
-	    <maven.compiler.source>1.6</maven.compiler.source>
-	    <maven.compiler.target>1.6</maven.compiler.target>
+	    <maven.compiler.source>1.8</maven.compiler.source>
+	    <maven.compiler.target>1.8</maven.compiler.target>
+        <source>1.8</source>
 	</properties>
     <description>
         BiVeS - BioModel Version Control System
@@ -43,7 +44,7 @@
         <dependency>
             <groupId>de.uni-rostock.sbi</groupId>
             <artifactId>BiVeS</artifactId>
-            <version>[1.12.1,)</version>
+            <version>[1.13.0,)</version>
         </dependency>
         <dependency>
             <groupId>de.binfalse</groupId>
